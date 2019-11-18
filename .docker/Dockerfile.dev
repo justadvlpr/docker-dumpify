@@ -1,0 +1,23 @@
+FROM php:7.3-buster
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        default-mysql-client \
+        cron \
+        gnupg \
+        zip \
+        unzip \
+        git \
+        sudo
+
+RUN mkdir /backup
+
+ADD ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+RUN curl --silent --show-error https://getcomposer.org/installer | php
+
+WORKDIR /app
+
+CMD ["/entrypoint.sh"]

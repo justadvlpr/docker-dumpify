@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+use Dumpify\Command\BuildCronCommand;
+use Dumpify\Command\SetupCommand;
+use Symfony\Component\Console\Application;
+
+$dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
+$dotEnv->load();
+
+date_default_timezone_set(getenv('APP_TIMEZONE'));
+
+$application = new Application();
+$application->add(new SetupCommand());
+$application->add(new BuildCronCommand());
+$application->run();

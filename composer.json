@@ -1,0 +1,41 @@
+{
+    "name": "justadvlpr/docker-dumpify",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.3.0",
+        "symfony/console": "^4.3",
+        "vlucas/phpdotenv": "^3.0"
+    },
+    "require-dev": {
+        "symplify/easy-coding-standard": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dumpify\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dumpify\\Test\\": "test"
+        }
+    },
+    "config": {
+        "process-timeout": 1800,
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "scripts": {
+        "post-autoload-dump": [
+            "@php -r \"file_exists('.env') || copy('.env.dist', '.env');\""
+        ],
+        "ecs": "vendor/bin/ecs check src --config ecs.yml --fix"
+    }
+}
