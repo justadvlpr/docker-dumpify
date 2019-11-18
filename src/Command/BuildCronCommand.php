@@ -52,15 +52,12 @@ class BuildCronCommand extends Command
 
         $cronSchedule = explode('||', getenv('APP_CRON_SCHEDULE'));
 
-        $crontabContent = <<<TEXT
-SHELL=/bin/bash
-BASH_ENV=/envs.env\n\n
-TEXT;
+        $crontabContent = "";
 
         foreach ($cronSchedule as $schedule) {
-            $backupCommand = rtrim(ltrim(trim($schedule), '"'), '"');
+            $commandId = uniqid();
 
-            $backupCommand .= " /usr/bin/mysqldump --user={$dbUser} --host={$dbHost} --password=\$APP_DB_PASSWORD --single-transaction --quick {$dbName}";
+            $backupCommand = "#!/bin/bash\n\n/usr/bin/mysqldump --user={$dbUser} --host={$dbHost} --password=\"\$APP_DB_PASSWORD\" --single-transaction --quick {$dbName}";
 
             if ($encryptEnabled) {
                 switch ($encryptEngine) {
@@ -74,7 +71,9 @@ TEXT;
                 }
             }
 
-            $crontabContent .= "{$backupCommand}\n\n";
+            file_put_contents("/app/runtime/{$commandId}.sh", $backupCommand);
+
+            $crontabContent .= rtrim(ltrim(trim($schedule), '"'), '"') . " {$commandId}.sh\n\n";
         }
 
         file_put_contents('/var/spool/cron/crontabs/dumpify', $crontabContent);
