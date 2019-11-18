@@ -35,9 +35,9 @@ class BuildCronCommand extends Command
                 '{time}',
             ],
             [
-                "`date '+\%Y-\%m-\%d_\%H:\%M:\%S'`",
-                "`date '+\%Y-\%m-\%d'`",
-                "`date '+\%H:\%M:\%S'`",
+                "`date '+%Y-%m-%d_%H:%M:%S'`",
+                "`date '+%Y-%m-%d'`",
+                "`date '+%H:%M:%S'`",
             ],
             $backupName
         );
@@ -61,6 +61,7 @@ class BuildCronCommand extends Command
 
             $backupCommand .= "export GPG_TTY=$(tty)\n";
             $backupCommand .= ". /env.sh\n\n";
+            $backupCommand .= "export HOME=/home/dumpify\n";
 
             $backupCommand .= "/usr/bin/mysqldump --user={$dbUser} --host={$dbHost} --password=\$APP_DB_PASSWORD --single-transaction --quick {$dbName}";
 
@@ -78,7 +79,7 @@ class BuildCronCommand extends Command
 
             file_put_contents("/app/runtime/{$commandId}.sh", $backupCommand);
 
-            $crontabContent .= rtrim(ltrim(trim($schedule), '"'), '"') . " /app/runtime/{$commandId}.sh\n\n";
+            $crontabContent .= rtrim(ltrim(trim($schedule), '"'), '"') . " /app/runtime/{$commandId}.sh > /home/dumpify/error.log 2>&1\n\n";
         }
 
         file_put_contents('/var/spool/cron/crontabs/dumpify', $crontabContent);
