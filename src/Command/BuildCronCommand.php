@@ -52,7 +52,10 @@ class BuildCronCommand extends Command
 
         $cronSchedule = explode('||', getenv('APP_CRON_SCHEDULE'));
 
-        $crontabContent = '';
+        $crontabContent = <<<TEXT
+SHELL=/bin/bash
+BASH_ENV=/envs.env\n\n
+TEXT;
 
         foreach ($cronSchedule as $schedule) {
             $backupCommand = rtrim(ltrim(trim($schedule), '"'), '"');
