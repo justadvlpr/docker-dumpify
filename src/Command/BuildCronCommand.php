@@ -62,7 +62,7 @@ class BuildCronCommand extends Command
             if ($encryptEnabled) {
                 switch ($encryptEngine) {
                     case 'gpg':
-                        $backupCommand .= " | /usr/bin/gpg -c --passphrase \$APP_ENCRYPT_KEY --batch --yes -o /backup/{$backupName}.sql.gpg";
+                        $backupCommand .= " | /usr/bin/gpg -c --passphrase \$APP_ENCRYPT_KEY --batch --yes -o \"/backup/{$backupName}.sql.gpg\"";
 
                         break;
                     default:
