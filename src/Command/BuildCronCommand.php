@@ -73,7 +73,7 @@ class BuildCronCommand extends Command
 
             file_put_contents("/app/runtime/{$commandId}.sh", $backupCommand);
 
-            $crontabContent .= rtrim(ltrim(trim($schedule), '"'), '"') . " {$commandId}.sh\n\n";
+            $crontabContent .= rtrim(ltrim(trim($schedule), '"'), '"') . " /app/runtime/{$commandId}.sh\n\n";
         }
 
         file_put_contents('/var/spool/cron/crontabs/dumpify', $crontabContent);
