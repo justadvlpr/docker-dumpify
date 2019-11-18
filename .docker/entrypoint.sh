@@ -2,6 +2,8 @@
 
 set -e
 
+declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /env.sh
+
 /app/bin/dumpify setup
 
 /app/bin/dumpify build-cron

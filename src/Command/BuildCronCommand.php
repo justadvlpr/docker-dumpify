@@ -57,7 +57,12 @@ class BuildCronCommand extends Command
         foreach ($cronSchedule as $schedule) {
             $commandId = uniqid();
 
-            $backupCommand = "#!/bin/bash\n\n/usr/bin/mysqldump --user={$dbUser} --host={$dbHost} --password=\"\$APP_DB_PASSWORD\" --single-transaction --quick {$dbName}";
+            $backupCommand = "#!/bin/bash\n\n";
+
+            $backupCommand .= "export GPG_TTY=$(tty)\n";
+            $backupCommand .= ". /env.sh\n\n";
+
+            $backupCommand .= "/usr/bin/mysqldump --user={$dbUser} --host={$dbHost} --password=\$APP_DB_PASSWORD --single-transaction --quick {$dbName}";
 
             if ($encryptEnabled) {
                 switch ($encryptEngine) {
