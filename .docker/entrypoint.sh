@@ -8,7 +8,7 @@ declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /envs.e
 
 /app/bin/dumpify build-cron
 
-crontab -u dumpify /app/runtime/crontab
+crontab -u dumpify /var/spool/cron/crontabs/dumpify
 /etc/init.d/cron start
 
 php -a
